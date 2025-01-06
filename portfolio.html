@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            margin-left: 50px;
+            padding: 20px;
+            background-color: #ffffff;
+            color: rgb(29,20,20);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  Optional: adds shadow to the header */
+            border-bottom: .25px solid #201111;
+        }
+
+        header .nav-links {
+            display: flex;
+            margin-right: 30px;
+            gap: 20px;
+        }
+
+        header a {
+            color: rgb(29, 20, 20);
+            text-decoration: none;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            width: 90%;
+            margin: 20px 0;
+            /* border-bottom: 1px solid #ccc; */
+            padding-bottom: 20px;
+            align-items: center;  /* Align items center vertically for larger screens */
+        }
+
+        .left {
+            flex: 1 1 45%;
+            padding: 10px;
+        }
+
+        .right {
+            flex: 1 1 45%;
+            padding: 10px;
+        }
+
+        .left img, .left audio {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Stack the content vertically */
+                align-items: flex-start; /* Align items to the start for a neat look */
+            }
+    
+            .left, .right {
+                flex: 1 1 100%; /* Ensure both left and right are 100% width on smaller screens */
+                text-align: left; /* Align text to the left on smaller screens */
+            }
+
+            .right {
+                margin-top: 10px; /* Add some space between the image and the text on mobile */
+            }
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));  /* Creates a responsive grid */
+            gap: 10px;  /* Spacing between images */
+            margin-top: 20px;
+        }
+
+        @media (min-width: 1024px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));  /* Larger images for wide screens */
+            }
+        }
+
+        .gallery img {
+            width: 100%;  /* Makes each image responsive */
+            height: auto;  /* Keeps image aspect ratio intact */
+            border-radius: 8px;  /* Optional: for rounded corners */
+            object-fit: cover;
+        }
+
+        /* Initial state for images (invisible and off-screen) */
+        .image-fade {
+            opacity: 0;
+            transform: translateY(100px);  /* Starts 50px below its position */
+            transition: opacity 0.3s ease-out, transform 0.1s ease-out;
+        }
+
+        /* When the image is in view, it will become visible and move to its original position */
+        .image-fade.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Optional: Add a subtle delay to images for a staggered effect */
+        .image-fade-delay {
+            transition-delay: 0.3s;
+        }
+
+        /* Basic styling for the audio player */
+        audio {
+            width: 100%;  /* Ensure it fills its container */
+            max-width: 600px;  /* Limit the width of the player */
+            height: auto;
+            border-radius: 8px;  /* Optional: Add rounded corners */
+            margin-top: 20px;
+        }
+
+        /* Optionally, hide default controls and implement your own */
+        audio::-webkit-media-controls {
+            display: none !important; /* Hide default controls for WebKit browsers */
+        }
+
+        /* Example: Custom Progress Bar (if you decide to create a custom player) */
+        .audio-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .audio-progress-bar {
+            width: 80%;
+            height: 5px;
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        .audio-progress-bar-filled {
+            height: 100%;
+            background: #4CAF50;
+            width: 0; /* Update dynamically */
+        }
+
+        /* Styling Play/Pause buttons */
+        .audio-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 15%;
+        }
+
+        button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: rgb(29, 20, 20);
+        }
+
+        /* Styling the play button specifically */
+        button.play-button {
+            font-size: 30px;  /* Larger play button */
+        }
+
+
+        .project-date {
+        font-size: 0.5em; /* Makes the date text smaller */
+        color: rgb(89, 126, 228); /* Optional: change the color */
+        margin-left: 10px; /* Adds some space between the title and date */
+        }
+
+        html {
+        scroll-behavior: smooth;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div>Portfolio</div>
+        <nav class="nav-links">
+            <a href="#audio">Audio</a>
+            <a href="#visual">Visual</a>
+            <a href="#writing">Writing</a>
+            <a href="#engineering">Engineering</a>
+        </nav>
+    </header>
+
+    <div class="container" id="visual">
+        <h1>Photography</h1>
+        <div class="left">
+            <img class="image-fade" src="images/img_0025.jpg" alt="Visual Artwork">
+        </div>
+        <div class="right">
+            <h2>Film<span class="project-date"><time datetime="2025-01-05">January 5, 2025</time></span></h2>
+            <p>Here we have a 15th century masterpiece. And if I can manage to scrape a little of it off, we find hidden beneath a 14th century underpiece. This Lurid work is comprised entirely of eggshells.</p>
+        </div>
+            <div class="gallery">
+                <img class="image-fade" src="images/IMG_0175.jpg" alt="Gallery Image 1">
+                <img class="image-fade" src="images/IMG_0216.jpg" alt="Gallery Image 3">
+                <img class="image-fade" src="images/IMG_0225.jpg" alt="Gallery Image">
+                <img class="image-fade" src="images/IMG_9704.JPG" alt="Gallery Image">
+                <img class="image-fade" src="images/IMG_9725.JPG" alt="Gallery Image">
+                <img class="image-fade" src="images/IMG_0218.jpg" alt="Gallery Image">
+                <img class="image-fade" src="images/IMG_0226.jpg" alt="Gallery Image">
+                <img class="image-fade" src="images/IMG_0260.jpg" alt="Gallery Image">
+                <img class="image-fade" src="images/IMG_0491.jpg" alt="Gallery Image">
+            </div>
+        
+        </div>
+    </div>
+
+    <!-- exhaust fandom dec 06 2024 -->
+    <div class="audio-container" id="audio">
+        <audio id="audio-player" preload="auto">
+            <source src="audio/exhaust fandom.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="audio-controls">
+            <button class="play-button" id="play-button">►</button>
+            <div class="audio-progress-bar">
+                <div class="audio-progress-bar-filled"></div>
+            </div>
+        </div>
+        <div class="left">
+            <img src="images/image1.jpg" alt="Visual Artwork">
+        </div>
+        <div class="right">
+            <h2>song a day <span class="project-date"><time datetime="2024-12-06">December 6, 2024</time></span></h2>
+            <p>recorded in a hotel room</p>
+    </div>
+
+    <!-- spaceman sorrow dec 30 2024 -->
+    <div class="audio-container">
+        <audio id="audio-player" preload="auto">
+            <source src="audio/Spaceman_Sorrow.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="audio-controls">
+            <button class="play-button" id="play-button">►</button>
+            <div class="audio-progress-bar">
+                <div class="audio-progress-bar-filled"></div>
+            </div>
+        </div>
+        <div class="left">
+            <img src="images/image1.jpg" alt="Visual Artwork">
+        </div>
+        <div class="right">
+            <h2>spaceman's sorrow <span class="project-date"><time datetime="2024-12-30">December 30, 2024</time></span></h2>
+            <p>Written and recorded with Dan Fitzgibbons in Lyme, NH</p>
+    </div>
+
+    <!-- chronomatic dec 27 2024 -->
+    <div class="audio-container">
+        <audio id="audio-player" preload="auto">
+            <source src="audio/chronomatic-master.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="audio-controls">
+            <button class="play-button" id="play-button">►</button>
+            <div class="audio-progress-bar">
+                <div class="audio-progress-bar-filled"></div>
+            </div>
+        </div>
+        <div class="left">
+            <img src="images/image1.jpg" alt="Visual Artwork">
+        </div>
+        <div class="right">
+            <h2>Chronomatic <span class="project-date"><time datetime="2024-12-27">December 27, 2024</time></span></h2>
+            <p>First time trying neuton's morpho</p>
+    </div>
+
+    <!-- swooping dec 22 2024 -->
+    <div class="audio-container">
+        <audio id="audio-player" preload="auto">
+            <source src="audio/swoooping.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="audio-controls">
+            <button class="play-button" id="play-button">►</button>
+            <div class="audio-progress-bar">
+                <div class="audio-progress-bar-filled"></div>
+            </div>
+        </div>
+        <div class="left">
+            <img src="images/image1.jpg" alt="Visual Artwork">
+        </div>
+        <div class="right">
+            <h2>swooping <span class="project-date"><time datetime="2024-12-22">December 22, 2024</time></span></h2>
+            <p>Recorded on the upright in NH</p>
+    </div>
+
+    <!-- a'bumpin dec 8, 2024 -->
+    <div class="audio-container">
+        <audio id="audio-player" preload="auto">
+            <source src="audio/a'bumpin.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="audio-controls">
+            <button class="play-button" id="play-button">►</button>
+            <div class="audio-progress-bar">
+                <div class="audio-progress-bar-filled"></div>
+            </div>
+        </div>
+        <div class="left">
+            <img src="images/image1.jpg" alt="Visual Artwork">
+        </div>
+        <div class="right">
+            <h2>a'bumpin <span class="project-date"><time datetime="2024-12-08">December 08, 2024</time></span></h2>
+            <p>all you have to do is move it</p>
+    </div>
+
+    <script>
+        const playButton = document.getElementById('play-button');
+        const audioPlayer = document.getElementById('audio-player');
+        const progressBar = document.querySelector('.audio-progress-bar-filled');
+    
+    // Flag to check if audio is already playing
+    let isPlaying = false;
+
+    // Toggle play/pause when clicking the play button
+    playButton.addEventListener('click', () => {
+        if (isPlaying) {
+            audioPlayer.pause();
+            playButton.textContent = '►';  // Change to play icon
+        } else {
+            audioPlayer.play().catch((error) => {
+                console.error("Error playing audio:", error);
+            });
+            playButton.textContent = '❚❚';  // Change to pause icon
+        }
+        isPlaying = !isPlaying; // Toggle play state
+    });
+
+    // Update progress bar while audio is playing
+    audioPlayer.addEventListener('timeupdate', () => {
+        const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progressBar.style.width = progress + '%';
+    });
+
+    // Ensure audio starts cleanly when it is loaded
+    audioPlayer.addEventListener('canplaythrough', () => {
+        console.log('Audio is ready to play!');
+    });
+
+    // Event listener for audio end
+    audioPlayer.addEventListener('ended', () => {
+        playButton.textContent = '►'; // Reset to play icon when audio ends
+        isPlaying = false;
+    });
+
+    // Create an IntersectionObserver instance
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // When the image comes into view, add the class 'in-view'
+                entry.target.classList.add('in-view');
+                // Stop observing the image once it's in view
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1  // Trigger when 10% of the element is in view
+    });
+
+    // Select all images with the class 'image-fade' to observe
+    const images = document.querySelectorAll('.image-fade');
+    images.forEach(image => {
+        observer.observe(image);
+    });
+
+</script>
+
+</body>
+</html>
