@@ -229,12 +229,12 @@
 
     <!-- exhaust fandom dec 06 2024 -->
     <div class="audio-container" id="audio">
-        <audio id="audio-player" preload="auto">
+        <audio class="audio-player" preload="auto">
             <source src="audio/exhaust fandom.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         <div class="audio-controls">
-            <button class="play-button" id="play-button">►</button>
+            <button class="play-button" >►</button>
             <div class="audio-progress-bar">
                 <div class="audio-progress-bar-filled"></div>
             </div>
@@ -249,12 +249,12 @@
 
     <!-- spaceman sorrow dec 30 2024 -->
     <div class="audio-container">
-        <audio id="audio-player" preload="auto">
+        <audio class="audio-player" preload="auto">
             <source src="audio/Spaceman_Sorrow.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         <div class="audio-controls">
-            <button class="play-button" id="play-button">►</button>
+            <button class="play-button" >►</button>
             <div class="audio-progress-bar">
                 <div class="audio-progress-bar-filled"></div>
             </div>
@@ -269,12 +269,12 @@
 
     <!-- chronomatic dec 27 2024 -->
     <div class="audio-container">
-        <audio id="audio-player" preload="auto">
+        <audio class="audio-player" preload="auto">
             <source src="audio/chronomatic-master.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         <div class="audio-controls">
-            <button class="play-button" id="play-button">►</button>
+            <button class="play-button" >►</button>
             <div class="audio-progress-bar">
                 <div class="audio-progress-bar-filled"></div>
             </div>
@@ -289,12 +289,12 @@
 
     <!-- swooping dec 22 2024 -->
     <div class="audio-container">
-        <audio id="audio-player" preload="auto">
+        <audio class="audio-player" preload="auto">
             <source src="audio/swoooping.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         <div class="audio-controls">
-            <button class="play-button" id="play-button">►</button>
+            <button class="play-button" >►</button>
             <div class="audio-progress-bar">
                 <div class="audio-progress-bar-filled"></div>
             </div>
@@ -309,12 +309,12 @@
 
     <!-- a'bumpin dec 8, 2024 -->
     <div class="audio-container">
-        <audio id="audio-player" preload="auto">
+        <audio class="audio-player" preload="auto">
             <source src="audio/a'bumpin.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         <div class="audio-controls">
-            <button class="play-button" id="play-button">►</button>
+            <button class="play-button" >►</button>
             <div class="audio-progress-bar">
                 <div class="audio-progress-bar-filled"></div>
             </div>
@@ -328,42 +328,59 @@
     </div>
 
     <script>
-        const playButton = document.getElementById('play-button');
-        const audioPlayer = document.getElementById('audio-player');
-        const progressBar = document.querySelector('.audio-progress-bar-filled');
-    
+        const playButtons = document.querySelectorAll('.play-button');
+        const audioPlayers = document.querySelectorAll('.audio-player');
+        const progressBars = document.querySelectorAll('.audio-progress-bar-filled');
+
     // Flag to check if audio is already playing
     let isPlaying = false;
+    let currentAudio = null;
+    let currentProgressBar = null;
 
-    // Toggle play/pause when clicking the play button
-    playButton.addEventListener('click', () => {
-        if (isPlaying) {
-            audioPlayer.pause();
-            playButton.textContent = '►';  // Change to play icon
-        } else {
-            audioPlayer.play().catch((error) => {
-                console.error("Error playing audio:", error);
-            });
-            playButton.textContent = '❚❚';  // Change to pause icon
-        }
-        isPlaying = !isPlaying; // Toggle play state
+    // Toggle play/pause for each audio element
+    playButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            const audioPlayer = audioPlayers[index];
+            const progressBar = progressBars[index];
+
+            if (audioPlayer.paused) {
+                // Pause any currently playing audio
+                if (currentAudio && !currentAudio.paused) {
+                    currentAudio.pause();
+                    currentProgressBar.style.width = '0%'; // Reset progress bar
+                }
+                // Play the clicked audio
+                audioPlayer.play().catch((error) => {
+                    console.error("Error playing audio:", error);
+                });
+                button.textContent = '❚❚';  // Change to pause icon
+                currentAudio = audioPlayer;  // Set as currently playing
+                currentProgressBar = progressBar; // Set current progress bar
+            } else {
+                audioPlayer.pause();
+                button.textContent = '►';  // Change to play icon
+            }
+        });
     });
 
     // Update progress bar while audio is playing
-    audioPlayer.addEventListener('timeupdate', () => {
-        const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-        progressBar.style.width = progress + '%';
+    audioPlayers.forEach((audioPlayer, index) => {
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBars[index].style.width = progress + '%';
+        });
     });
 
-    // Ensure audio starts cleanly when it is loaded
-    audioPlayer.addEventListener('canplaythrough', () => {
-        console.log('Audio is ready to play!');
-    });
+    // // Ensure audio starts cleanly when it is loaded
+    // audioPlayer.addEventListener('canplaythrough', () => {
+    //     console.log('Audio is ready to play!');
+    // });
 
     // Event listener for audio end
-    audioPlayer.addEventListener('ended', () => {
-        playButton.textContent = '►'; // Reset to play icon when audio ends
-        isPlaying = false;
+    audioPlayers.forEach((audioPlayer, index) => {
+        audioPlayer.addEventListener('ended', () => {
+            playButtons[index].textContent = '►'; // Reset to play icon when audio ends
+        });
     });
 
     // Create an IntersectionObserver instance
